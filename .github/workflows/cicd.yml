@@ -1,45 +1,45 @@
-name: Flask CI/CD Pipeline
+name: Flask Docker CI/CD
 
 on:
   push:
     branches:
       - main
 
-  pull_request:
-    branches:
-      - main
-
 jobs:
-  build-and-test:
+  build-test-docker:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Get code from GitHub
+      # Checkout Code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Install Python
+      # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Step 3: Install dependencies
-      - name: Install Requirements
+      # Install Requirements
+      - name: Install Dependencies
         run: |
           pip install -r requirements.txt
 
-      # Step 4: Check Python syntax
+      # Check Python Syntax
       - name: Run Python Check
         run: |
           python -m py_compile app.py
 
-      # Step 5: Start Flask App
-      - name: Run Flask App
+      # Build Docker Image
+      - name: Build Docker Image
         run: |
-          python app.py &
-          sleep 5
+          docker build -t flask-notes-app .
 
-      # Step 6: Success Message
-      - name: Deployment Success
-        run: echo "CI/CD Pipeline Executed Successfully"
+      # Run Docker Container
+      - name: Run Docker Container
+        run: |
+          docker run -d -p 5000:5000 --name flask-container flask-notes-app
+
+      # Verify Running Containers
+      - name: Check Running Containers
+        run: docker ps

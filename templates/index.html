@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Notes App</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Simple Notes App</h1>
+
+      <form action="/add" method="POST">
+        <input type="text" name="note" placeholder="Enter note" required />
+
+        <button type="submit">Add</button>
+      </form>
+
+      <div class="notes">
+        {% for note in notes %}
+
+        <div class="card">{{ note }}</div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,32 +1,21 @@
 <!doctype html>
 <html>
   <head>
-    <title>Notes App</title>
-
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    <title>Flask Notes App</title>
+    <link rel="stylesheet" href="static/style.css" />
   </head>
-
   <body>
-    <div class="container">
-      <h1>Simple Note App</h1>
-      <h2>Powered by Flask</h2>
+    <h1>Notes App</h1>
 
-      <form action="/add" method="POST">
-        <input type="text" name="note" placeholder="Enter note" required />
+    <form action="/add" method="POST">
+      <input type="text" name="note" placeholder="Enter Note" />
+      <button type="submit">Add Note</button>
+    </form>
 
-        <button type="submit">Add</button>
-      </form>
-
-      <div class="notes">
-        {% for note in notes %}
-
-        <div class="card">{{ note }}</div>
-
-        {% endfor %}
-      </div>
-    </div>
+    <ul>
+      {% for note in notes %}
+      <li>{{ note }}</li>
+      {% endfor %}
+    </ul>
   </body>
 </html>

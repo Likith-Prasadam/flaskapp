@@ -1,30 +1,23 @@
-from app import app, notes
+from flask import Flask, render_template, request, redirect
 
-def setup_function():
-    notes.clear()
+app = Flask(__name__)
 
-def test_home_page():
-    client = app.test_client()
-    response = client.get('/')
+# Store notes temporarily
+notes = []
 
-    assert response.status_code == 200
+@app.route('/')
+def home():
+    return render_template('index.html', notes=notes)
 
-def test_add_note():
-    client = app.test_client()
+@app.route('/add', methods=['POST'])
+def add_note():
 
-    response = client.post('/add', data={
-        'note': 'Test Note'
-    }, follow_redirects=True)
+    note = request.form['note']
 
-    assert response.status_code == 200
-    assert b'Test Note' in response.data
+    if note:
+        notes.append(note)
 
-def test_empty_note():
-    client = app.test_client()
+    return redirect('/')
 
-    response = client.post('/add', data={
-        'note': ''
-    }, follow_redirects=True)
-
-    assert response.status_code == 200
-    assert len(notes) == 0
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
